@@ -193,10 +193,10 @@ pool.on(
     }
 );
 
-// callback-compatible exports
+// export promise pool
 module.exports =
-    pool;
-
-// promise export
-module.exports.promise =
     promisePool;
+
+// optional raw pool access
+module.exports.rawPool =
+    pool;

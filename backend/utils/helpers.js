@@ -172,13 +172,11 @@ const safeArray = (
 const asyncHandler = (
     fn
 ) => {
-
     return (
         req,
         res,
         next
     ) => {
-
         Promise.resolve(
             fn(
                 req,
@@ -186,7 +184,6 @@ const asyncHandler = (
                 next
             )
         )
-
             .catch(
                 next
             );
@@ -194,20 +191,12 @@ const asyncHandler = (
 };
 
 module.exports = {
-
     safeNumber,
-
     safeInteger,
-
     sanitizeString,
-
     escapeHTML,
-
     getPagination,
-
     buildPaginationMeta,
-
     safeArray,
-
     asyncHandler
 };
