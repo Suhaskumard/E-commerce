@@ -13,9 +13,18 @@ hero section
     align-items: flex-start;
     justify-content: center;
 }
-
-#hero h4{
-    padding-bottom: 15px;
+#herotexts{
+    height:90vh;
+    width:40%;
+    display:flexbox;
+    flex-direction: column;
+    align-content:center;
+    flex-wrap:wrap;
+}
+#hero h2{
+    font-size:2.5rem;
+    margin-bottom: 10px;
+    line-height: 1;
 }
 
 #hero h1{
