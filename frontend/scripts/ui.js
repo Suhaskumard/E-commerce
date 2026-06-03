@@ -1,103 +1,66 @@
-// mobile navbar - SIMPLIFIED AND BULLETPROOF
-function initializeMobileNavbar() {
-    console.log("🔧 Initializing mobile navbar...");
-    
-    const bar = document.getElementById("mobile-menu-btn");
-    const closeBtn = document.getElementById("mobile-close-btn");
-    const navLinks = document.getElementById("navbar-links");
-    const authLink = document.getElementById("auth-link");
-    const profileDropdown = document.getElementById("profile-dropdown");
+// mobile menu functionality
+function initializeMobileMenu() {
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+    const mobileCloseBtn = document.getElementById('mobile-close-btn');
+    const mobileLinks = document.querySelectorAll('.mobile-link');
 
-    console.log("Found elements:", {
-        bar: !!bar,
-        closeBtn: !!closeBtn,
-        navLinks: !!navLinks,
-        authLink: !!authLink,
-        profileDropdown: !!profileDropdown
-    });
-
-    if (!bar || !navLinks) {
-        console.warn("❌ Navbar elements not found! Retrying...");
-        return false;
+    if (!mobileMenuBtn || !mobileMenuOverlay || !mobileCloseBtn) {
+        console.warn('Mobile menu elements not found');
+        return;
     }
 
-    // Check if already initialized
-    if (bar.dataset.initialized === "true") {
-        console.log("✅ Already initialized, skipping");
-        return true;
-    }
-
-    console.log("✅ All navbar elements found!");
-
-    // 1. Hamburger Button Click - Open Menu
-    bar.onclick = function(e) {
+    // open mobile menu
+    mobileMenuBtn.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        console.log("🍔 Hamburger clicked!");
-        navLinks.classList.add("active");
-        console.log("✅ Menu opened, navbar classes:", navLinks.className);
-    };
+        mobileMenuOverlay.classList.add('active');
+        mobileMenuBtn.classList.add('hidden');
+        document.body.style.overflow = 'hidden';
+    });
 
-    console.log("✅ Hamburger button listener attached");
+    // close mobile menu via close button
+    mobileCloseBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        closeMobileMenu();
+    });
 
-    // 2. Cross Button Click - Close Menu
-    if (closeBtn) {
-        closeBtn.onclick = function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            console.log("❌ Close button clicked!");
-            navLinks.classList.remove("active");
-            console.log("✅ Menu closed");
-        };
-        
-        console.log("✅ Close button listener attached");
-    }
+    // close mobile menu when clicking on links
+    mobileLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            closeMobileMenu();
+        });
+    });
 
-    // 3. Profile Link Click
-    if (authLink && profileDropdown) {
-        authLink.onclick = function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            profileDropdown.classList.toggle("active");
-            console.log("👤 Profile dropdown toggled");
-        };
-    }
-
-    // 4. Close menu when clicking navigation links
-    const links = navLinks.querySelectorAll("a");
-    for (let i = 0; i < links.length; i++) {
-        if (links[i].id === "auth-link") continue;
-        links[i].onclick = function() {
-            navLinks.classList.remove("active");
-            console.log("🔗 Navigation link clicked, menu closed");
-        };
-    }
-
-    // 5. Outside Click Auto-Close System
-    document.onclick = function(e) {
-        // Close dropdown
-        if (profileDropdown && profileDropdown.classList.contains("active") && 
-            !profileDropdown.contains(e.target) && e.target !== authLink) {
-            profileDropdown.classList.remove("active");
+    // close mobile menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (mobileMenuOverlay.classList.contains('active')) {
+            if (!mobileMenuOverlay.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                closeMobileMenu();
+            }
         }
-        
-        // Close mobile menu
-        if (navLinks.classList.contains("active") && 
-            !navLinks.contains(e.target) && !bar.contains(e.target)) {
-            navLinks.classList.remove("active");
-            console.log("🖱️ Clicked outside, menu closed");
+    });
+
+    // close on escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && mobileMenuOverlay.classList.contains('active')) {
+            closeMobileMenu();
         }
-    };
-    
-    // Mark as initialized
-    bar.dataset.initialized = "true";
-    navLinks.dataset.initialized = "true";
-    
-    console.log("✅ Mobile navbar initialization complete!");
-    return true;
+    });
 }
 
-
+function closeMobileMenu() {
+    const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    if (mobileMenuOverlay) {
+        mobileMenuOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+    if (mobileMenuBtn) {
+        mobileMenuBtn.classList.remove('hidden');
+    }
+}
 
 
 
@@ -314,19 +277,7 @@ function updateCartCount() {
 // initialize ui
 function initializeUI() {
     console.log("🎯 InitializeUI called");
-    const success = initializeMobileNavbar();
-    if (!success) {
-        console.log("⚠️ First attempt failed, retrying...");
-        setTimeout(() => {
-            initializeMobileNavbar();
-        }, 100);
-        setTimeout(() => {
-            initializeMobileNavbar();
-        }, 500);
-        setTimeout(() => {
-            initializeMobileNavbar();
-        }, 1000);
-    }
+    initializeMobileMenu();
     initializeStickyHeader();
     initializeRippleEffect();
     updateCartCount();
@@ -351,34 +302,6 @@ document.addEventListener(
         setTimeout(initializeUI, 1500);
     }
 );
-
-// ABSOLUTE FALLBACK - force init after 2 seconds
-setTimeout(() => {
-    console.log("⏰ 2-second fallback timer fired");
-    const navLinks = document.getElementById("navbar-links");
-    if (navLinks && !navLinks.dataset.initialized) {
-        console.log("🔄 Force initializing navbar...");
-        const success = initializeMobileNavbar();
-        if (success) {
-            navLinks.dataset.initialized = "true";
-        }
-    }
-}, 2000);
-
-// ULTIMATE FALLBACK - window.onload
-window.addEventListener('load', () => {
-    console.log("🪟 Window load event fired");
-    setTimeout(() => {
-        const navLinks = document.getElementById("navbar-links");
-        if (navLinks && !navLinks.dataset.initialized) {
-            console.log("🚨 Ultimate fallback - initializing navbar NOW");
-            const success = initializeMobileNavbar();
-            if (success) {
-                navLinks.dataset.initialized = "true";
-            }
-        }
-    }, 100);
-});
 
 // expose globally
 window.updateCartCount =
