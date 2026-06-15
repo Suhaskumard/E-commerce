@@ -284,6 +284,7 @@ app.use((err, req, res, next) => {
 // unhandled promise rejection
 process.on("unhandledRejection", (reason) => {
   console.error("UNHANDLED REJECTION:", reason);
+  process.exit(1);
 });
 
 // uncaught exception
