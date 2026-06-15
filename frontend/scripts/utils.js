@@ -243,11 +243,7 @@ const refreshAccessToken =
                                 "application/json"
                         },
 
-                        body:
-                            JSON.stringify({
-
-                                refreshToken
-                            })
+                        body: JSON.stringify({})
                     }
                 );
 
@@ -266,21 +262,12 @@ const refreshAccessToken =
                 return null;
             }
 
-            // save tokens
-            localStorage.setItem(
-                CONFIG.STORAGE_KEYS.TOKEN,
-                data.accessToken
-            );
-
-            if (
-                data.refreshToken
-            ) {
-
-                localStorage.setItem(
-                    CONFIG.STORAGE_KEYS.REFRESH_TOKEN,
-                    data.refreshToken
-                );
+            // save user
+            if (data.user) {
+                setJSON(CONFIG.STORAGE_KEYS.USER, data.user);
             }
+
+            return data.success ? true : null;
 
             // save user
             if (
@@ -362,13 +349,10 @@ const apiRequest =
                 await fetch(
                     `${CONFIG.API_BASE}${url}`,
                     {
-
                         ...options,
-
+                        credentials: options.credentials || "include",
                         headers,
-
-                        signal:
-                            controller.signal
+                        signal: controller.signal
                     }
                 );
 

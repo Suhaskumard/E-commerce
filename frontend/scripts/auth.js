@@ -150,16 +150,8 @@ function saveAuthSession(
         return;
     }
 
-    localStorage.setItem(
-        CONFIG.STORAGE_KEYS.TOKEN,
-        response.accessToken || ""
-    );
-
-    localStorage.setItem(
-        CONFIG.STORAGE_KEYS.REFRESH_TOKEN,
-        response.refreshToken || ""
-    );
-
+    // Tokens are securely stored in HttpOnly cookies by the backend.
+    
     AppUtils.setJSON(
         CONFIG.STORAGE_KEYS.USER,
         response.user || {}
