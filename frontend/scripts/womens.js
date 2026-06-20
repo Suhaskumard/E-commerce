@@ -17,7 +17,7 @@
         { 
             id: 'm1', 
             name: 'Pure Traditional Vibe', 
-            price: 150.00, 
+            price: 899.00, 
             image: 'assets/images/WomenTraditional.jpeg', 
             category: 'traditionalWear', 
             brand: 'Ekaya',
@@ -27,7 +27,7 @@
         { 
             id: 'm2', 
             name: 'Comfort Fit Classic Denim Jeans', 
-            price: 96.00, 
+            price: 680.00, 
             image: 'assets/images/womensJeans.webp', 
             category: 'Jeans', 
             brand: 'Levis',
@@ -37,7 +37,7 @@
         { 
             id: 'm3', 
             name: 'Compfy Tops', 
-            price: 90.00, 
+            price: 350.00, 
             image: 'assets/images/womensTop.jpg', 
             category: 'tops', 
             brand: 'Zara',
@@ -66,7 +66,7 @@
             const params = new URLSearchParams({
                 page: currentPage,
                 limit: 8,
-                gender: "women" 
+                
             });
 
             if (currentSearch) params.append("search", currentSearch);
@@ -117,9 +117,9 @@
     function applySorting() {
         if (!currentSort) return;
         
-        if (currentSort === "price-low-high") {
+        if (currentSort === "low-high") {
             currentProducts.sort((a, b) => a.price - b.price);
-        } else if (currentSort === "price-high-low") {
+        } else if (currentSort === "high-low") {
             currentProducts.sort((a, b) => b.price - a.price);
         }
     }
@@ -155,7 +155,7 @@
                 <div class="star">
                     ${starsHtml}
                 </div>
-                <h4>$${Number(product.price).toFixed(2)}</h4>
+                <h4>₹${Number(product.price).toFixed(2)}</h4>
             </div>
             <button class="add-to-cart-btn" data-id="${product.id}">
                 <i class="fal fa-shopping-cart cart"></i>
@@ -178,7 +178,7 @@
 
         // Product details page redirection (Optional feature if implemented in your ui.js)
         div.addEventListener('click', () => {
-            window.location.href = `sproduct.html?id=${product.id}`;
+            window.location.href = `product.html?id=${product.id}`;
         });
         
         return div;
@@ -198,8 +198,8 @@
         if (elements.filterButtons) {
             elements.filterButtons.forEach(btn => {
                 btn.addEventListener("click", (e) => {
-                    elements.filterButtons.forEach(b => b.classList.remove("active"));
-                    e.target.classList.add("active");
+                    elements.filterButtons.forEach(b => b.classList.remove("active-filter"));
+                    e.target.classList.add("active-filter");
                     currentCategory = e.target.dataset.category || "all";
                     fetchProducts(1);
                 });

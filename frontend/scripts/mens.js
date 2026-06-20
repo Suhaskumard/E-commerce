@@ -17,7 +17,7 @@
         { 
             id: 'm1', 
             name: 'Pure Cotton Casual Slim-Fit Shirt', 
-            price: 78.00, 
+            price: 599.00, 
             image: 'assets/images/mensShirt.jpg', 
             category: 'shirt', 
             brand: 'Adidas',
@@ -27,9 +27,9 @@
         { 
             id: 'm2', 
             name: 'Comfort Fit Classic Denim Jeans', 
-            price: 96.00, 
+            price: 699.00, 
             image: 'assets/images/mensJeans.avif', 
-            category: 'all', 
+            category: 'jeans', 
             brand: 'Levis',
             stock: 25, 
             rating: 4 
@@ -37,9 +37,9 @@
         { 
             id: 'm3', 
             name: 'Modern Denim Outerwear Jacket', 
-            price: 95.00, 
+            price: 899.00, 
             image: 'assets/images/MensJacket.webp', 
-            category: 'hoodie', 
+            category: 'jacket', 
             brand: 'Zara',
             stock: 8, 
             rating: 5 
@@ -66,7 +66,7 @@
             const params = new URLSearchParams({
                 page: currentPage,
                 limit: 8,
-                gender: "men" // Backend ko batayega ki sirf men's clothing chahiye
+        
             });
 
             if (currentSearch) params.append("search", currentSearch);
@@ -117,9 +117,9 @@
     function applySorting() {
         if (!currentSort) return;
         
-        if (currentSort === "price-low-high") {
+        if (currentSort === "low-high") {
             currentProducts.sort((a, b) => a.price - b.price);
-        } else if (currentSort === "price-high-low") {
+        } else if (currentSort === "high-low") {
             currentProducts.sort((a, b) => b.price - a.price);
         }
     }
@@ -155,7 +155,7 @@
                 <div class="star">
                     ${starsHtml}
                 </div>
-                <h4>$${Number(product.price).toFixed(2)}</h4>
+                <h4>₹${Number(product.price).toFixed(2)}</h4>
             </div>
             <button class="add-to-cart-btn" data-id="${product.id}">
                 <i class="fal fa-shopping-cart cart"></i>
@@ -178,7 +178,7 @@
 
         // Product details page redirection (Optional feature if implemented in your ui.js)
         div.addEventListener('click', () => {
-            window.location.href = `sproduct.html?id=${product.id}`;
+            window.location.href = `product.html?id=${product.id}`;
         });
         
         return div;
@@ -198,8 +198,8 @@
         if (elements.filterButtons) {
             elements.filterButtons.forEach(btn => {
                 btn.addEventListener("click", (e) => {
-                    elements.filterButtons.forEach(b => b.classList.remove("active"));
-                    e.target.classList.add("active");
+                    elements.filterButtons.forEach(b => b.classList.remove("active-filter"));
+                    e.target.classList.add("active-filter");
                     currentCategory = e.target.dataset.category || "all";
                     fetchProducts(1);
                 });
